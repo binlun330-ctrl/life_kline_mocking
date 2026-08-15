@@ -49,3 +49,10 @@ export interface LifeDestinyResult {
   chartData: KLinePoint[];
   analysis: AnalysisData;
 }
+
+export interface BirthProfile {
+  name: string;
+  gender: 'Male' | 'Female';
+  birthDate: string;
+  birthTime: string;
+}

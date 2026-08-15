@@ -50,7 +50,7 @@ const Card = ({ title, icon: Icon, content, score, colorClass, extraBadges }: an
     } else if (content === null || content === undefined) {
       safeContent = '';
     } else if (typeof content === 'object') {
-      // If AI returns an object or array (unexpected but possible), stringify it readable
+      // Unexpected structured content is rendered as readable text.
       try {
         // If it's a simple array of strings, join them
         if (Array.isArray(content)) {
@@ -91,7 +91,7 @@ const Card = ({ title, icon: Icon, content, score, colorClass, extraBadges }: an
       </div>
       {typeof score === 'number' && (
         <div className="pt-4 mt-2 border-t border-gray-50">
-          <div className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">Rating</div>
+          <div className="text-xs text-gray-400 font-medium mb-1 tracking-wider">综合参考</div>
           <ScoreBar score={score} />
         </div>
       )}
@@ -132,9 +132,9 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis }) => {
       {/* Grid for categorical analysis with Scores */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {/* Crypto Analysis */}
+        {/* High-volatility investment reference */}
         <Card
-          title="币圈交易运势"
+          title="高波动投资参考"
           icon={Bitcoin}
           content={analysis.crypto}
           score={analysis.cryptoScore}
@@ -142,10 +142,10 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis }) => {
           extraBadges={
             <>
               <span className="px-2 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded border border-amber-200">
-                🔥 暴富流年: {analysis.cryptoYear}
+                📈 相对高点: {analysis.cryptoYear}
               </span>
               <span className="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded border border-indigo-200">
-                🎯 推荐: {analysis.cryptoStyle}
+                🎯 风格参考: {analysis.cryptoStyle}
               </span>
             </>
           }
@@ -234,7 +234,7 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ analysis }) => {
                 </li>
               </ul>
               <p className="text-xs text-black leading-relaxed border-t border-gray-100 pt-2 text-justify">
-                注：命运还受环境和个人选择影响，八字趋势不能完全代表真实人生，命理学不是玄学，而是帮助我们在人生列车上做出更好选择的哲学工具。一命二运三风水 四积阴德五读书 六名七相八敬神 九遇贵人十养生。
+                注：本页由固定历法和五行规则自动生成，仅供传统文化娱乐与自我观察，不构成医疗、投资、婚姻或职业建议。现实结果取决于环境、行动与个人选择。
               </p>
             </div>
           }
