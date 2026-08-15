@@ -1,78 +1,42 @@
-# 🔮 人生 K 线 (Life Destiny K-Line)
+# 人生 K 线（Life Destiny K-Line）
 
-> **基于 AI 大模型和传统八字命理，将人生运势以 K 线图形式可视化展现。**
+输入公历出生日期、出生时间和性别，网站会在浏览器本地自动排出四柱与大运，并生成 1–100 岁的人生 K 线和多维度文化解读。
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/5lin/lifekline)
+## 特点
 
----
+- 一次填写，直接查看结果
+- 自动计算四柱、起运与大运
+- 不调用 AI、不消耗 Token
+- 不需要 API Key 或后端服务
+- 出生信息只在当前浏览器中处理，不上传、不保存
+- 支持导出 JSON、保存 PDF 和离线网页
 
-## ✨ 功能特点
+## 工作原理
 
-1. **可视化运势**: 用股票 K 线图展示 1-100 岁的人生运势起伏，直观呈现人生"牛市"与"熊市"。
-2. **AI 辅助批断**: 通过复制提示词到用户自选的 AI，生成性格、事业、财富、婚姻等多维度报告。
-3. **发展风水**: 提供方位建议、地理环境选择及开运布局。
-4. **Web3 特供**: "币圈交易运势"板块，包含暴富流年预测与交易风格建议。
-5. **免 API**: 网站不调用 AI API，不收集、不保存 API Key。
+历法计算使用 [`lunar-typescript`](https://github.com/6tail/lunar-typescript)。走势图和文字报告由项目内固定、可重复的五行规则及模板生成，相同输入会得到相同结果。
 
----
+本项目仅供传统文化娱乐与产品演示，不构成医疗、投资、婚姻或职业建议。
 
-## 📝 使用方法
-
-1. **填写八字信息** - 输入四柱干支和大运信息
-2. **复制提示词** - 点击按钮复制完整提示词
-3. **发送给 AI** - 粘贴到 ChatGPT、Claude、Gemini 等任意 AI
-4. **导入结果** - 将 AI 返回的 JSON 数据粘贴回来
-5. **查看 K 线** - 生成完整的人生 K 线图和分析报告
-
----
-
-## 🚀 一键部署
-
-### Vercel 部署（推荐）
-
-点击下方按钮一键部署到 Vercel：
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/lifekline)
-
-### GitHub Pages
-
-1. 将项目推送到 GitHub 仓库的 `main` 分支。
-2. 打开 `Settings` → `Pages`。
-3. 在 `Build and deployment` 中将 `Source` 设为 `GitHub Actions`。
-4. 等待 `Deploy to GitHub Pages` 工作流完成。
-
-### 本地运行
+## 本地运行
 
 ```bash
-# 安装依赖
 npm install
-
-# 启动开发服务器
 npm run dev
+```
 
-# 构建生产版本
+生产构建：
+
+```bash
 npm run build
 ```
 
----
+## 部署
 
-## 🛠️ 技术栈
+仓库已包含 GitHub Pages 工作流。推送到 `main` 后会自动构建并部署，无需配置密钥或服务器。
 
-- **前端框架**: React 19 + Vite
-- **UI 样式**: TailwindCSS
-- **图表库**: Recharts
-- **AI 支持**: ChatGPT、Claude、Gemini 等任意 AI
+## 技术栈
 
----
-
-## 📸 项目预览
-
-![人生流年大运K线图](assets/1.png)
-*(图1：人生流年大运 K 线走势图)*
-
-![详细分析报告](assets/2.png)
-*(图2：命理分析、币圈运势与风水建议)*
-
----
-
-**免责声明**: 本项目仅供娱乐与文化研究，命运掌握在自己手中。切勿迷信，请理性看待分析结果。
+- React 19 + TypeScript + Vite
+- Tailwind CSS
+- Recharts
+- lunar-typescript

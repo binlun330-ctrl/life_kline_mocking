@@ -4,51 +4,15 @@ import LifeKLineChart from './components/LifeKLineChart';
 import AnalysisResult from './components/AnalysisResult';
 import ImportDataMode from './components/ImportDataMode';
 import { LifeDestinyResult } from './types';
-import { Sparkles, AlertCircle, Download, Printer, Trophy, FileDown, FileUp, Database } from 'lucide-react';
-
-const parseLifeDestinyData = (data: any): LifeDestinyResult => {
-  if (!data.chartPoints || !Array.isArray(data.chartPoints)) {
-    throw new Error('无效的数据格式：缺少 chartPoints');
-  }
-
-  return {
-    chartData: data.chartPoints,
-    analysis: {
-      bazi: data.bazi || [],
-      summary: data.summary || '无摘要',
-      summaryScore: data.summaryScore || 5,
-      personality: data.personality || '无性格分析',
-      personalityScore: data.personalityScore || 5,
-      industry: data.industry || '无',
-      industryScore: data.industryScore || 5,
-      fengShui: data.fengShui || '建议多亲近自然，保持心境平和。',
-      fengShuiScore: data.fengShuiScore || 5,
-      wealth: data.wealth || '无',
-      wealthScore: data.wealthScore || 5,
-      marriage: data.marriage || '无',
-      marriageScore: data.marriageScore || 5,
-      health: data.health || '无',
-      healthScore: data.healthScore || 5,
-      family: data.family || '无',
-      familyScore: data.familyScore || 5,
-      crypto: data.crypto || '暂无交易分析',
-      cryptoScore: data.cryptoScore || 5,
-      cryptoYear: data.cryptoYear || '待定',
-      cryptoStyle: data.cryptoStyle || '现货定投',
-    },
-  };
-};
+import { Sparkles, Download, Printer, Trophy, FileDown, ShieldCheck } from 'lucide-react';
 
 const App: React.FC = () => {
   const [result, setResult] = useState<LifeDestinyResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [userName, setUserName] = useState<string>('');
 
-  // 处理导入数据
-  const handleDataImport = (data: LifeDestinyResult) => {
+  const handleDataImport = (data: LifeDestinyResult, name: string) => {
     setResult(data);
-    setUserName('');
-    setError(null);
+    setUserName(name);
   };
 
   // 导出为 JSON 文件
@@ -89,40 +53,6 @@ const App: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
-
-  // 从 JSON 文件导入
-  const handleImportJsonFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const data = JSON.parse(content);
-
-        setResult(parseLifeDestinyData(data));
-        setError(null);
-      } catch (err: any) {
-        setError(`文件解析失败：${err.message}`);
-      }
-    };
-    reader.readAsText(file);
-    // 重置 input 以便可以再次选择同一文件
-    event.target.value = '';
-  };
-
-  const handleLoadDemo = async () => {
-    try {
-      const response = await fetch(new URL('mock-data.json', document.baseURI));
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      setResult(parseLifeDestinyData(await response.json()));
-      setUserName('演示用户');
-      setError(null);
-    } catch (err: any) {
-      setError(`演示数据加载失败：${err.message}`);
-    }
   };
 
   const handlePrint = () => {
@@ -286,9 +216,9 @@ const App: React.FC = () => {
               <p className="text-xs text-gray-500 uppercase tracking-widest">Life Destiny K-Line</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-500 font-medium bg-gray-100 px-3 py-1.5 rounded-full">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            基于 AI 大模型驱动
+          <div className="flex items-center gap-2 text-sm text-emerald-700 font-medium bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
+            <ShieldCheck className="w-4 h-4" />
+            本地计算 · 零 Token
           </div>
         </div>
       </header>
@@ -301,54 +231,16 @@ const App: React.FC = () => {
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 animate-fade-in">
             <div className="text-center max-w-2xl flex flex-col items-center">
               <h2 className="text-4xl md:text-5xl font-serif-sc font-bold text-gray-900 mb-6">
-                洞悉命运起伏 <br />
-                <span className="text-indigo-600">预见人生轨迹</span>
+                填一次出生信息 <br />
+                <span className="text-indigo-600">立即看人生 K 线</span>
               </h2>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                结合<strong>传统八字命理</strong>与<strong>金融可视化技术</strong>，
-                将您的一生运势绘制成类似股票行情的K线图。
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                自动排出四柱与大运，在浏览器中生成 100 年走势和多维度解读。
+                <br className="hidden md:block" /> 无需懂八字，也无需跳转其他工具。
               </p>
-
-              {/* 使用说明 */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100 mb-6 text-left w-full max-w-lg">
-                <h3 className="font-bold text-indigo-800 mb-2">📝 使用方法</h3>
-                <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
-                  <li>填写八字信息，生成专属提示词</li>
-                  <li>复制提示词到任意 AI（ChatGPT、Claude、Gemini 等）</li>
-                  <li>将 AI 返回的 JSON 数据粘贴回来</li>
-                </ol>
-              </div>
-
-              {/* 快速导入 JSON 文件 */}
-              <label className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-all group mb-4">
-                <FileUp className="w-6 h-6 text-emerald-500 group-hover:text-emerald-600" />
-                <span className="text-base font-medium text-gray-600 group-hover:text-emerald-700">已有 JSON 文件？点击直接导入</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportJsonFile}
-                  className="hidden"
-                />
-              </label>
-              <button
-                type="button"
-                onClick={handleLoadDemo}
-                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
-              >
-                <Database className="w-4 h-4" />
-                无需 AI，直接查看演示
-              </button>
             </div>
 
-            {/* 导入模式组件 */}
             <ImportDataMode onDataImport={handleDataImport} />
-
-            {error && (
-              <div className="flex items-center gap-2 text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-100 max-w-md w-full animate-bounce-short">
-                <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                <p className="text-sm font-bold">{error}</p>
-              </div>
-            )}
           </div>
         )}
 
